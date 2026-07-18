@@ -1,0 +1,10 @@
+services:
+  osakaos:
+    build: .
+    container_name: osakaos-builder
+    privileged: true
+    volumes:
+      - .:/osakaOS
+      - /dev/kvm:/dev/kvm
+    working_dir: /osakaOS
+    command: bash

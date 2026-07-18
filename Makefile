@@ -79,7 +79,7 @@ osakaOS.iso: osakaOS.bin
 	mkdir iso/boot
 	mkdir iso/boot/grub
 	cp osakaOS.bin iso/boot/osakaOS.bin
-	echo 'set timeout=5' >> iso/boot/grub/grub.cfg
+	echo 'set timeout=0' >> iso/boot/grub/grub.cfg
 	echo 'set default=0' >> iso/boot/grub/grub.cfg
 	echo 'insmod normal' >> iso/boot/grub/grub.cfg
 	echo 'insmod multiboot' >> iso/boot/grub/grub.cfg
@@ -102,9 +102,10 @@ osakaOS.iso: osakaOS.bin
 	echo '	}' >> iso/boot/grub/grub.cfg
 	echo '}' >> iso/boot/grub/grub.cfg
 	#grub-mkrescue --output=osakaOS.iso iso
-	grub-mkrescue --compress=lzo --output=osakaOS.iso iso
+	grub-mkrescue --compress=xz --output=osakaOS.iso iso
+	dd if=/dev/zero of=osakaOS.iso bs=512 count=1 seek=512 conv=notrunc
 	rm -rf iso
-	
+
 	qemu-img create -f qcow2 Image.img 128M
 	dd if=osakaOS.iso of=Image.img
 
