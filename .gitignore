@@ -1,0 +1,78 @@
+# =========================
+# Build artifacts
+# =========================
+
+obj/
+*.o
+*.bin
+*.iso
+*.img
+*.dd
+
+# Generated boot/GRUB directory
+iso/
+
+# Temporary build directories
+tmpdir/
+tmp/
+temp/
+
+# =========================
+# OS images / emulators
+# =========================
+
+Image.img
+diskimage.dd
+
+# QEMU files
+*.qcow
+*.qcow2
+*.raw
+*.vmdk
+*.vdi
+*.nvram
+
+# =========================
+# Logs / dumps
+# =========================
+
+*.log
+*.out
+*.dump
+*.core
+
+# =========================
+# Compiler artifacts
+# =========================
+
+*.a
+*.so
+*.elf
+*.map
+
+# =========================
+# Editor / IDE files
+# =========================
+
+.vscode/
+.idea/
+
+# Vim
+*.swp
+*.swo
+
+# Emacs
+*~
+
+# =========================
+# OS files
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+# Generated dependency files
+# =========================
+
+*.d
