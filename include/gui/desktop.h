@@ -44,11 +44,17 @@ namespace os {
 				drivers::CMOS* cmos;
 				drivers::DriverManager* drvManager;
 
-				Simulator* osaka;
+Simulator* osaka;
 
-				bool taskbar = true;
-				bool drawButtons = true;
-				bool takeSS = false;
+			bool taskbar = true;
+			bool drawButtons = true;
+			bool takeSS = false;
+
+			//set by Desktop::Draw when the win key is pressed in
+			//the osaka simulation, signalling DrawDesktopTask
+			//to switch the VGA back to text mode and resume the
+			//terminal command line loop
+			bool pendingTextMode = false;
 
 				common::uint32_t MouseX;
 				common::uint32_t MouseY;

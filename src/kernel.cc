@@ -636,20 +636,13 @@ uint32_t readCount()
 void sleep(uint32_t ms)
 {
 
-	Port8Bit channel0(0x40);
+	asm("cli");
+	uint32_t start = os::drivers::pit_tick_counter;
+	asm("sti");
 
-	for (uint32_t i = 0; i < ms; i++)
+	while ((os::drivers::pit_tick_counter - start) < ms)
 	{
-
-		asm("cli");
-		channel0.Write(1193182 / 1000);
-		channel0.Write((1193182 / 1000) >> 8);
-		asm("sti");
-
-		uint32_t start = readCount();
-		while ((start - readCount() < 1000))
-		{
-		}
+		asm("hlt");
 	}
 }
 

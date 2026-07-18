@@ -74,9 +74,10 @@ namespace os {
 							common::uint32_t width, common::uint32_t height);
 				~VideoGraphicsArray();
 
-				virtual bool SupportsMode(common::uint32_t width, common::uint32_t height, common::uint32_t colordepth);
-				virtual bool SetMode(common::uint32_t width, common::uint32_t height, common::uint32_t colordepth);
-				virtual void PaletteUpdate(common::uint8_t index, common::uint8_t r, common::uint8_t g, common::uint8_t b);	
+virtual bool SupportsMode(common::uint32_t width, common::uint32_t height, common::uint32_t colordepth);
+			virtual bool SetMode(common::uint32_t width, common::uint32_t height, common::uint32_t colordepth);
+			virtual void SetTextMode();
+			virtual void PaletteUpdate(common::uint8_t index, common::uint8_t r, common::uint8_t g, common::uint8_t b);
 
 				void PutPixel(common::int32_t x, common::int32_t y, common::uint8_t colorIndex);
 				void PutPixelRaw(common::int32_t x, common::int32_t y, common::uint8_t colorIndex);

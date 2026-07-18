@@ -215,7 +215,17 @@ void Desktop::Draw(common::GraphicsContext* gc) {
 
 	if (this->keyValue == 0x5b) {
 
-		this->osaka->sim ^= 1;
+		if (this->osaka->sim) {
+			//simulation -> terminal mode
+			//(hand off to DrawDesktopTask / RunTerminalMode)
+			this->osaka->sim = false;
+			this->osaka->mode = 0;
+			this->osaka->menu = false;
+			this->pendingTextMode = true;
+		} else {
+			//graphical mode -> osaka simulation
+			this->osaka->sim = true;
+		}
 		this->OnMouseUp(0);
 		this->keyValue = 0;
 	}
@@ -683,10 +693,11 @@ DesktopButton::DesktopButton(char* file, uint8_t openType, uint8_t* imageFile, u
 
 	this->openType = openType;
 
-	for (int i = 0; file[i] != '\0'; i++) { 
-			
-		this->file[i] = file[i]; 
+	int nameLen = 0;
+	for (; file[nameLen] != '\0'; nameLen++) {
+		this->file[nameLen] = file[nameLen];
 	}
+	this->file[nameLen] = '\0';
 
 	memset(this->iconBuf, 0x00, 400);
 

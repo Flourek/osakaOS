@@ -108,6 +108,45 @@ bool VideoGraphicsArray::SupportsMode(uint32_t width, uint32_t height, uint32_t 
 }
 
 
+void VideoGraphicsArray::SetTextMode() {
+
+	//standard VGA 80x25 text mode (mode 03h) register values
+	unsigned char g_text80x25[] = {
+
+	/* misc */
+		0x67,
+	/* seq */
+		0x03, 0x08, 0x03, 0x00, 0x06,
+	/* crtc */
+		0x5f, 0x4f, 0x50, 0x82, 0x55, 0x81, 0xbf, 0x1f,
+		0x00, 0x4f, 0x0d, 0x0e, 0x00, 0x00, 0x00, 0x00,
+		0x9c, 0x8e, 0x8f, 0x28, 0x1f, 0x96, 0xb9, 0xa3,
+		0xff,
+	/* gc */
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x10, 0x0e, 0x00,
+		0xff,
+	/* ac */
+		0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x14, 0x07,
+		0x38, 0x39, 0x3a, 0x3b, 0x3c, 0x3d, 0x3e, 0x3f,
+		0x0c, 0x00, 0x0f, 0x08, 0x00
+	};
+
+	WriteRegisters(g_text80x25);
+	this->FrameBufferSegment = GetFrameBufferSegment();
+
+	//reset text-mode color palette to the standard 16 colors
+	this->colorPaletteMask.Write(0xff);
+	this->colorRegisterWrite.Write(0);
+
+	for (uint16_t color = 0; color < 256; color++) {
+
+		this->colorDataPort.Write(((defaultPalette[color] >> 16) & 0xff) >> 2);
+		this->colorDataPort.Write(((defaultPalette[color] >> 8) & 0xff) >> 2);
+		this->colorDataPort.Write((defaultPalette[color] & 0xff) >> 2);
+	}
+}
+
+
 bool VideoGraphicsArray::SetMode(uint32_t width, uint32_t height, uint32_t colordepth) {
 
 	if (SupportsMode(width, height, colordepth) == false) {

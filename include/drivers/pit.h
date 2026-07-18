@@ -11,6 +11,8 @@ namespace os {
 
 	namespace drivers {
 
+		extern volatile common::uint32_t pit_tick_counter;
+
 		class PIT : public os::hardwarecommunication::InterruptHandler, public Driver {
 	
 			//private:

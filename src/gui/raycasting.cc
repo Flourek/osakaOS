@@ -70,9 +70,9 @@ void RaycastSpace::SortSprites(common::int32_t* order, double* dist, common::int
 
 void RaycastSpace::ComputeSpace(GraphicsContext* gc, char keylog[16], uint8_t logIndex, int32_t mouseX) {
 
-	
-	double time = 0;
-	double oldTime = 0;
+
+	static double time = 0;
+	static double oldTime = 0;
 
 	const uint16_t w = WIDTH_13H;
 	const uint8_t h = HEIGHT_13H;
@@ -308,18 +308,19 @@ void RaycastSpace::ComputeSpace(GraphicsContext* gc, char keylog[16], uint8_t lo
 	oldTime = time;
 	time = getTicks() / 40.0;
 	double frameTime = (time - oldTime) / 1000.0;
+	if (frameTime <= 0 || frameTime > 0.1) { frameTime = 0.016; }
 
 	//speed modifiers
 	double moveSpeed = frameTime * 3.0;
-	double rotSpeed = frameTime * (double)(mouseX/4);
+	double rotSpeed = absD((double)mouseX) * 0.03;
 
 	//input
 	if (this->keyDown) {
-	
+
 		for (int i = 0; i < logIndex; i++) {
-	
+
 			switch (keylog[i]) {
-	
+
 				//walking
 				case 'w':
 					if (worldMap[int(posX+dirX*moveSpeed)][int(posY)] == false) { posX += dirX * moveSpeed; }
@@ -342,8 +343,8 @@ void RaycastSpace::ComputeSpace(GraphicsContext* gc, char keylog[16], uint8_t lo
 	}
 
 	//rotate right
-	if (mouseX < w/2) {
-		
+	if (mouseX > 0) {
+
 		double oldDirX = dirX;
 		dirX = dirX * cos(-rotSpeed) - dirY * sin(-rotSpeed);
 		dirY = oldDirX * sin(-rotSpeed) + dirY * cos(-rotSpeed);
@@ -351,10 +352,10 @@ void RaycastSpace::ComputeSpace(GraphicsContext* gc, char keylog[16], uint8_t lo
 		planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
 		planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
 	}
-	
+
 	//rotate left
-	if (mouseX > w/2) {
-		
+	else if (mouseX < 0) {
+
 		double oldDirX = dirX;
 		dirX = dirX * cos(rotSpeed) - dirY * sin(rotSpeed);
 		dirY = oldDirX * sin(rotSpeed) + dirY * cos(rotSpeed);

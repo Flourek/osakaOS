@@ -763,9 +763,11 @@ void Simulator::DrawRoom(GraphicsContext* gc) {
 			case 1: //platformer
 				this->platformer.Draw(gc, ticks);
 				break;
-			case 2: //shooter
-				this->shooter.Draw(gc, ticks, keylog, logIndex, keyPress, moveMouseX, moveMouseY);
-				break;
+case 2: //shooter
+			this->shooter.Draw(gc, ticks, keylog, logIndex, keyPress, moveMouseX, moveMouseY);
+			this->moveMouseX = 0;
+			this->moveMouseY = 0;
+			break;
 			default:
 				break;
 		}

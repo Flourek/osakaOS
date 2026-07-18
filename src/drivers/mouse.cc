@@ -63,14 +63,20 @@ void MouseDriver::Activate() {
 uint32_t MouseDriver::HandleInterrupt(uint32_t esp) {
 
 	uint8_t status = commandport.Read();
-	
+
 	if (!(status & 0x20)) { return esp; }
-	buffer[offset] = dataport.Read();
-	
+	uint8_t data = dataport.Read();
+
 	if (handler == 0) { return esp; }
+
+	if (offset == 0 && ((data & 0x08) == 0 || (data & 0xC0) != 0)) {
+		return esp;
+	}
+
+	buffer[offset] = data;
 	offset = (offset + 1) % 3;
 
-	
+
 	if (offset == 0) {
 
 		handler->OnMouseMove((int8_t)buffer[1], -((int8_t)buffer[2]));
